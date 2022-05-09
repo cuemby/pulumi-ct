@@ -125,7 +125,7 @@ test::
 	cd examples && go test -v -tags=all -parallel ${TESTPARALLELISM} -timeout 2h
 
 relase:
-	git commit -s -am "$(type):$(msg)"
+	git commit -s -am "$(msg)"
 	git tag -a v$$(pulumictl get version) -m "$(msg)"
 	git tag -a sdk/v$$(pulumictl get version) -m "$(msg)"
 	git push origin --all
