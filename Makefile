@@ -126,6 +126,7 @@ test::
 
 release:: VERSION := $(shell pulumictl get version -o)
 release: build
+	git add .
 	git commit -s -am "$(msg)"
 	git tag -a v$$(pulumictl get version -o) -m "$(msg)"
 	git tag -a sdk/v$$(pulumictl get version -o) -m "$(msg)"
