@@ -54,7 +54,7 @@ func Provider() tfbridge.ProviderInfo {
 		Name: "ct",
 		// DisplayName is a way to be able to change the casing of the provider
 		// name when being displayed on the Pulumi registry
-		DisplayName: "",
+		DisplayName: "cuemby",
 		// The default publisher for all packages is Pulumi.
 		// Change this to your personal name (or a company name) that you
 		// would like to be shown in the Pulumi Registry if this package is published
@@ -120,6 +120,7 @@ func Provider() tfbridge.ProviderInfo {
 				"@types/node": "^10.0.0", // so we can access strongly typed node definitions.
 				"@types/mime": "^2.0.0",
 			},
+			PackageName: fmt.Sprintf("@cuemby/%s", mainPkg),
 			// See the documentation for tfbridge.OverlayInfo for how to lay out this
 			// section, or refer to the AWS provider. Delete this section if there are
 			// no overlay files.
@@ -133,7 +134,7 @@ func Provider() tfbridge.ProviderInfo {
 		},
 		Golang: &tfbridge.GolangInfo{
 			ImportBasePath: filepath.Join(
-				fmt.Sprintf("github.com/pulumi/pulumi-%[1]s/sdk/", mainPkg),
+				fmt.Sprintf("github.com/cuemby/pulumi-%[1]s/sdk/", mainPkg),
 				tfbridge.GetModuleMajorVersion(version.Version),
 				"go",
 				mainPkg,
@@ -144,6 +145,7 @@ func Provider() tfbridge.ProviderInfo {
 			PackageReferences: map[string]string{
 				"Pulumi": "3.*",
 			},
+			RootNamespace: "Cuemby",
 		},
 	}
 

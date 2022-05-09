@@ -1,5 +1,5 @@
 {
-    "name": "@pulumi/ct",
+    "name": "@cuemby/ct",
     "version": "${VERSION}",
     "description": "A Pulumi package for creating and managing ct cloud resources.",
     "keywords": [
