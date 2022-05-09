@@ -11,7 +11,7 @@ VERSION_PATH     := ${PROVIDER_PATH}/pkg/version.Version
 
 TFGEN           := pulumi-tfgen-${PACK}
 PROVIDER        := pulumi-resource-${PACK}
-VERSION         := $(shell pulumictl get version)
+VERSION         := $(shell pulumictl get version -o)
 
 TESTPARALLELISM := 4
 
@@ -57,7 +57,7 @@ provider:: tfgen install_plugins # build the provider binary
 
 build_sdks:: install_plugins provider build_nodejs build_python build_go build_dotnet # build all the sdks
 
-build_nodejs:: VERSION := $(shell pulumictl get version --language javascript)
+build_nodejs:: VERSION := $(shell pulumictl get version -o --language javascript)
 build_nodejs:: install_plugins tfgen # build the node sdk
 	$(WORKING_DIR)/bin/$(TFGEN) nodejs --overlays provider/overlays/nodejs --out sdk/nodejs/
 	cd sdk/nodejs/ && \
@@ -67,7 +67,7 @@ build_nodejs:: install_plugins tfgen # build the node sdk
         cp ../../README.md ../../LICENSE package.json yarn.lock ./bin/ && \
 		sed -i.bak -e "s/\$${VERSION}/$(VERSION)/g" ./bin/package.json
 
-build_python:: PYPI_VERSION := $(shell pulumictl get version --language python)
+build_python:: PYPI_VERSION := $(shell pulumictl get version -o --language python)
 build_python:: install_plugins tfgen # build the python sdk
 	$(WORKING_DIR)/bin/$(TFGEN) python --overlays provider/overlays/python --out sdk/python/
 	cd sdk/python/ && \
@@ -78,9 +78,9 @@ build_python:: install_plugins tfgen # build the python sdk
         rm ./bin/setup.py.bak && \
         cd ./bin && python3 setup.py build sdist
 
-build_dotnet:: DOTNET_VERSION := $(shell pulumictl get version --language dotnet)
+build_dotnet:: DOTNET_VERSION := $(shell pulumictl get version -o --language dotnet)
 build_dotnet:: install_plugins tfgen # build the dotnet sdk
-	pulumictl get version --language dotnet
+	pulumictl get version -o --language dotnet
 	$(WORKING_DIR)/bin/$(TFGEN) dotnet --overlays provider/overlays/dotnet --out sdk/dotnet/
 	cd sdk/dotnet/ && \
 		echo "${DOTNET_VERSION}" >version.txt && \
@@ -124,10 +124,10 @@ install_sdks:: install_dotnet_sdk install_python_sdk install_nodejs_sdk
 test::
 	cd examples && go test -v -tags=all -parallel ${TESTPARALLELISM} -timeout 2h
 
-release:: VERSION := $(shell pulumictl get version -o --version-prefix=$(semver))
-# release:
-# 	git commit -s -am "$(msg)"
-# 	git tag -a v$$(pulumictl get version) -m "$(msg)"
-# 	git tag -a sdk/v$$(pulumictl get version) -m "$(msg)"
-# 	git push origin --all
-# 	git push origin --tags
+release:: VERSION := $(shell pulumictl get version -o)
+release: build
+	git commit -s -am "$(msg)"
+	git tag -a v$$(pulumictl get version -o) -m "$(msg)"
+	git tag -a sdk/v$$(pulumictl get version -o) -m "$(msg)"
+	git push origin --all
+	git push origin --tags
