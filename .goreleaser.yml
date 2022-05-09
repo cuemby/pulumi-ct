@@ -3,7 +3,7 @@ archives:
     name_template: "{{ .Binary }}-{{ .Tag }}-{{ .Os }}-{{ .Arch }}"
 before:
   hooks:
-    - make build_provider
+    - make provider
 builds:
   - binary: provider-ct
     dir: provider
