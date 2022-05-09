@@ -124,3 +124,9 @@ install_sdks:: install_dotnet_sdk install_python_sdk install_nodejs_sdk
 test::
 	cd examples && go test -v -tags=all -parallel ${TESTPARALLELISM} -timeout 2h
 
+relase:
+	git commit -s -am "$(type):$(msg)"
+	git tag -a v$$(pulumictl get version) -m "$(msg)"
+	git tag -a sdk/v$$(pulumictl get version) -m "$(msg)"
+	git push origin --all
+	git push origin --tags
