@@ -128,7 +128,9 @@ pre_release: build
 	git add .
 	git commit -s -am "$(msg)"
 
-release: pre_release
+release:
+	git add .
+	git commit -s -am "$(msg)"
 	git tag -a v$$(pulumictl get version -o) -m "$(msg)"
 	git tag -a sdk/v$$(pulumictl get version -o) -m "$(msg)"
 	git push origin --all
